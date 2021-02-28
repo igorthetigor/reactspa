@@ -1,25 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Suspense, lazy, ReactElement } from 'react';
+import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
 import './App.css';
 
-function App() {
+const Home = lazy(() => import('./routes/Home'));
+const About = lazy(() => import('./routes/About'));
+const LoadApi = lazy(() => import('./routes/TriggerLoading'));
+
+function App(): ReactElement {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <ul>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to="/about">About</Link>
+        </li>
+        <li>
+          <Link to="/characters">Rick and Morti</Link>
+        </li>
+      </ul>
+      <Switch>
+        <Suspense fallback={<h1>Loading...</h1>}>
+          <Route exact path="/" component={Home} />
+          <Route path="/about" component={About} />
+          <Route path="/characters" component={LoadApi} />
+        </Suspense>
+      </Switch>
+    </Router>
   );
 }
 
